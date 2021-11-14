@@ -1,0 +1,26 @@
+#!/bin/bash
+if [ ${#} -ne 2 ]; then
+        echo "Not enough command line arguments" >&2
+        exit 1
+elif [ ! -x $2 ]; then
+        echo "Error: Not executable" >&2
+        exit 1
+elif [ ! -r $1 ]; then
+        echo "Error: Not readable" >&2
+        exit 1
+fi
+for file in $(cat "$1"); do
+        if [ -e ${file}.out ]; then
+                if [ ! -w ${file}.out ]; then
+                        echo "Error: Not writable" >&2
+                        exit 1
+                fi
+        elif [ -e ${file}.in ] && [ -e ${file}.args ]; then
+                $2 $(cat ${file}.args) < ${file}.in > ${file}.out
+        elif [ ! -e ${file}.args ] && [ -e ${file}.in ]; then
+                $2 < ${file}.in > ${file}.out
+        elif [ ! -e ${file}.in ] && [ -e ${file}.args ]; then
+                $2 $(cat ${file}.args) > ${file}.out
+        else $2>$file.out
+        fi
+done
