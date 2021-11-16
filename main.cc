@@ -4,6 +4,7 @@
 #include "studio.h"
 #include "filledboxdecorator.h"
 #include "blinkdecorator.h"
+#include "movingboxdecorator.h"
 
 int main () {
   AsciiArt *canvas = new Blank;
@@ -29,6 +30,7 @@ int main () {
       int top, bottom, left, right;
       char what;
       std::cin >> top >> bottom >> left >> right >> what;
+      //Decorates the blank canvas with a filled box on top.
       canvas = new FilledBoxDecorator(top, bottom, left, right, what, canvas);
       s = new Studio(canvas);
 
@@ -37,6 +39,7 @@ int main () {
       int top, bottom, left, right;
       char what;
       std::cin >> top >> bottom >> left >> right >> what;
+
       canvas = new BlinkDecorator(
                new FilledBoxDecorator(top, bottom, left, right, what, canvas));
       s = new Studio(canvas);
@@ -46,7 +49,8 @@ int main () {
       int top, bottom, left, right;
       char what, dir;
       std::cin >> top >> bottom >> left >> right >> what >> dir;
-
+      canvas = new MovingBoxDecorator(top, bottom, left, right, what, dir, canvas);
+      s = new Studio(canvas);
     }
     else if (command == "maskbox") {
       int top, bottom, left, right;
